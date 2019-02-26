@@ -1,7 +1,8 @@
-package com.gmail.andrezarazka.springmvctdd;
+package com.gmail.andrezarazka.springmvctdd.controller;
 
 import com.gmail.andrezarazka.springmvctdd.model.Reservation;
-import com.gmail.andrezarazka.springmvctdd.repository.ReservationRepository;
+import com.gmail.andrezarazka.springmvctdd.service.ReservationService;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest
 public class ReservationRestControllerTest {
@@ -24,16 +27,20 @@ public class ReservationRestControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ReservationRepository repository;
+    private ReservationService service;
 
     @Test
     public void getReservations() throws Exception {
-        Mockito.when(this.repository.findAll()).thenReturn(Collections.singletonList(new Reservation(1L, "Jane")));
+        Mockito.when(this.service.getReservations())
+                .thenReturn(Collections.singletonList(new Reservation(1L, "Jane")));
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/reservations"))
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("@.[0].id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("@.[0].reservationName").value("Jane"))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1L))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.reservationName", Matchers.is("Jane"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

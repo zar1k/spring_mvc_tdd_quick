@@ -1,4 +1,4 @@
-package com.gmail.andrezarazka.springmvctdd;
+package com.gmail.andrezarazka.springmvctdd.repository;
 
 import com.gmail.andrezarazka.springmvctdd.model.Reservation;
 import org.assertj.core.api.Assertions;
